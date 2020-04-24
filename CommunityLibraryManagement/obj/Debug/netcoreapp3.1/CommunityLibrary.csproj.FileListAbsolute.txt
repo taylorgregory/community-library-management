@@ -1,0 +1,13 @@
+C:\Users\taylo\Documents\Directories\Git\intro-to-algorithms\CommunityLibraryManagement\bin\Debug\netcoreapp3.1\CommunityLibrary.exe
+C:\Users\taylo\Documents\Directories\Git\intro-to-algorithms\CommunityLibraryManagement\bin\Debug\netcoreapp3.1\CommunityLibrary.deps.json
+C:\Users\taylo\Documents\Directories\Git\intro-to-algorithms\CommunityLibraryManagement\bin\Debug\netcoreapp3.1\CommunityLibrary.runtimeconfig.json
+C:\Users\taylo\Documents\Directories\Git\intro-to-algorithms\CommunityLibraryManagement\bin\Debug\netcoreapp3.1\CommunityLibrary.runtimeconfig.dev.json
+C:\Users\taylo\Documents\Directories\Git\intro-to-algorithms\CommunityLibraryManagement\bin\Debug\netcoreapp3.1\CommunityLibrary.dll
+C:\Users\taylo\Documents\Directories\Git\intro-to-algorithms\CommunityLibraryManagement\bin\Debug\netcoreapp3.1\CommunityLibrary.pdb
+C:\Users\taylo\Documents\Directories\Git\intro-to-algorithms\CommunityLibraryManagement\obj\Debug\netcoreapp3.1\CommunityLibrary.csprojAssemblyReference.cache
+C:\Users\taylo\Documents\Directories\Git\intro-to-algorithms\CommunityLibraryManagement\obj\Debug\netcoreapp3.1\CommunityLibrary.csproj.CoreCompileInputs.cache
+C:\Users\taylo\Documents\Directories\Git\intro-to-algorithms\CommunityLibraryManagement\obj\Debug\netcoreapp3.1\CommunityLibrary.AssemblyInfoInputs.cache
+C:\Users\taylo\Documents\Directories\Git\intro-to-algorithms\CommunityLibraryManagement\obj\Debug\netcoreapp3.1\CommunityLibrary.AssemblyInfo.cs
+C:\Users\taylo\Documents\Directories\Git\intro-to-algorithms\CommunityLibraryManagement\obj\Debug\netcoreapp3.1\CommunityLibrary.dll
+C:\Users\taylo\Documents\Directories\Git\intro-to-algorithms\CommunityLibraryManagement\obj\Debug\netcoreapp3.1\CommunityLibrary.pdb
+C:\Users\taylo\Documents\Directories\Git\intro-to-algorithms\CommunityLibraryManagement\obj\Debug\netcoreapp3.1\CommunityLibrary.genruntimeconfig.cache

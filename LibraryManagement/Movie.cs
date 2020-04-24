@@ -8,18 +8,28 @@ namespace LibraryManagement
 {
     public class Movie
     {
-        // data members, data fields or characteristics
+        // initialisation
         private string title;
         private string[] starring; // made this an array because there could be several people?
         private string director;
         private int duration; //min
-        private enum Genre { Drama, Adventure, Family, Action, SciFi, Comedy, Animated, Thriller, Other };
+        public enum Genre { Drama, Adventure, Family, Action, SciFi, Comedy, Animated, Thriller, Other };
         private Genre genre;
-        private enum Classification { General, ParentalGuidance, Mature, MatureAccompanied };
+        public enum Classification { General, ParentalGuidance, Mature, MatureAccompanied };
         private Classification classification;
         private string releaseDate;
 
         // constructor
+        public Movie(string title, string[] starring, string director, int duration, Genre genre, Classification classification, string releaseDate)
+        {
+            this.title = title;
+            this.starring = starring;
+            this.director = director;
+            this.duration = duration;
+            this.genre = genre;
+            this.classification = classification;
+            this.releaseDate = releaseDate;
+        }
 
         // getters and setters
         public string Title
@@ -42,9 +52,9 @@ namespace LibraryManagement
             set { duration = value; }
         }
 
-        // genre
+        // genre (??)
 
-        // classification
+        // classification (??)
 
         public string ReleaseDate
         {

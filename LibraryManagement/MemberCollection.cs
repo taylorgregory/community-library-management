@@ -8,5 +8,6 @@ namespace LibraryManagement
 {
     class MemberCollection
     {
+        private List<Member> members = new List<Member>();
     }
 }

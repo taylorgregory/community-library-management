@@ -1,0 +1,6 @@
+C:\Users\taylo\Documents\Directories\Git\intro-to-algorithms\LibraryManagement\bin\Debug\LibraryManagement.dll
+C:\Users\taylo\Documents\Directories\Git\intro-to-algorithms\LibraryManagement\bin\Debug\LibraryManagement.pdb
+C:\Users\taylo\Documents\Directories\Git\intro-to-algorithms\LibraryManagement\obj\Debug\LibraryManagement.csprojAssemblyReference.cache
+C:\Users\taylo\Documents\Directories\Git\intro-to-algorithms\LibraryManagement\obj\Debug\LibraryManagement.csproj.CoreCompileInputs.cache
+C:\Users\taylo\Documents\Directories\Git\intro-to-algorithms\LibraryManagement\obj\Debug\LibraryManagement.dll
+C:\Users\taylo\Documents\Directories\Git\intro-to-algorithms\LibraryManagement\obj\Debug\LibraryManagement.pdb
