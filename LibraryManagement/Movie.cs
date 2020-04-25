@@ -10,7 +10,7 @@ namespace LibraryManagement
     {
         // initialisation
         private string title;
-        private string[] starring; // made this an array because there could be several people?
+        private string[] starring; // several people?
         private string director;
         private int duration; //min
         public enum Genre { Drama, Adventure, Family, Action, SciFi, Comedy, Animated, Thriller, Other };
@@ -18,6 +18,9 @@ namespace LibraryManagement
         public enum Classification { General, ParentalGuidance, Mature, MatureAccompanied };
         private Classification classification;
         private string releaseDate;
+
+        private int borrowHistory;
+        private int copiesAvailable;
 
         // constructor
         public Movie(string title, string[] starring, string director, int duration, Genre genre, Classification classification, string releaseDate)
@@ -37,6 +40,8 @@ namespace LibraryManagement
             get { return title; }
             set { title = value; }
         }
+
+
 
         // **** not sure about array (starring)
 

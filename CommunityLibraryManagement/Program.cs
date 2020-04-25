@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel.Design;
 using System.Net;
+using System.Reflection.Metadata;
 using System.Runtime.InteropServices;
 using System.Xml.Serialization;
 
@@ -29,7 +30,30 @@ namespace CommunityLibrary
 
         static void DisplayStaffLogin()
         {
-            // 
+            string username = null;
+            string password;
+
+            do
+            {
+                // Reset the console
+                Console.Clear();
+
+                if (!string.IsNullOrEmpty(username)) // this means that it is not the first time this has happened --- not necessarily...
+                {
+                    Console.WriteLine("Incorrect username or password. Press any key to try again or press 0 to return to the main menu.");
+                    Console.ReadKey();
+                    Console.Clear();
+                }
+
+                Console.WriteLine("Please enter your staff username: ");
+                username = Console.ReadLine().ToString();
+
+                Console.WriteLine("Please enter your staff password");
+                password = Console.ReadLine().ToString(); // do we need to censor password?
+
+            } while (username != "staff" || password != "today123");
+
+            DisplayStaffMenu();
         }
 
         static void DisplayStaffMenu()
@@ -42,10 +66,51 @@ namespace CommunityLibrary
             Console.WriteLine("1. Add a new movie DVD");
             Console.WriteLine("2. Remove a movie DVD");
             Console.WriteLine("3. Register a new member");
-            Console.WriteLine("4. Find a registered member's phone number");
+            Console.WriteLine("4. Find a registered member's phone number"); 
             Console.WriteLine("0. Return to main menu");
             Console.WriteLine("==================================");
             Console.WriteLine("Please make a selection (1-4 or 0 to return to main menu)");
+        }
+
+        static void AddMovie()
+        {
+
+        }
+
+        static void RemoveMovie()
+        {
+
+        }
+
+        static void RegisterMember()
+        {
+            Console.WriteLine("3. Register a new member");
+            Console.WriteLine("");
+            
+            Console.Write("Full name: ");
+            string name = Console.ReadLine().ToString();
+            
+            Console.Write("Address: ");
+            string addr = Console.ReadLine().ToString();
+            
+            Console.Write("Phone number: ");
+            string num = Console.ReadLine().ToString(); 
+
+            // LibraryManagement.Member new = new Member;
+
+            // add an instance to member collection using (name, addr, num)
+        }
+
+        static string FindPhoneNumber(string name)
+        {
+            string number = 
+
+            return "answer"; 
+        }
+
+        static void DisplayMemberLogin()
+        {
+
         }
 
         static void DisplayMemberMenu()
@@ -152,7 +217,7 @@ namespace CommunityLibrary
 
         static void Main(string[] args)
         {
-            FunctionalMainMenu();
+            DisplayStaffLogin();
         }
     }
 }
