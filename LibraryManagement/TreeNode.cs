@@ -6,8 +6,10 @@ using System.Threading.Tasks;
 
 namespace LibraryManagement
 {
-    class MemberCollection
+    class TreeNode
     {
-        // add 
+        public TreeNode left;
+        public Movie movie;
+        public TreeNode right;
     }
 }

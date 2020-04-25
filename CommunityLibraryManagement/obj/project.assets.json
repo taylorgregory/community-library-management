@@ -1,11 +1,29 @@
 {
   "version": 3,
   "targets": {
-    ".NETCoreApp,Version=v3.1": {}
+    ".NETCoreApp,Version=v3.1": {
+      "LibraryManagement/1.0.0": {
+        "type": "project",
+        "compile": {
+          "bin/placeholder/LibraryManagement.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/LibraryManagement.dll": {}
+        }
+      }
+    }
   },
-  "libraries": {},
+  "libraries": {
+    "LibraryManagement/1.0.0": {
+      "type": "project",
+      "path": "../LibraryManagement/LibraryManagement.csproj",
+      "msbuildProject": "../LibraryManagement/LibraryManagement.csproj"
+    }
+  },
   "projectFileDependencyGroups": {
-    ".NETCoreApp,Version=v3.1": []
+    ".NETCoreApp,Version=v3.1": [
+      "LibraryManagement >= 1.0.0"
+    ]
   },
   "packageFolders": {
     "C:\\Users\\taylo\\.nuget\\packages\\": {}
@@ -32,7 +50,11 @@
       },
       "frameworks": {
         "netcoreapp3.1": {
-          "projectReferences": {}
+          "projectReferences": {
+            "C:\\Users\\taylo\\Documents\\Directories\\Git\\intro-to-algorithms\\LibraryManagement\\LibraryManagement.csproj": {
+              "projectPath": "C:\\Users\\taylo\\Documents\\Directories\\Git\\intro-to-algorithms\\LibraryManagement\\LibraryManagement.csproj"
+            }
+          }
         }
       },
       "warningProperties": {

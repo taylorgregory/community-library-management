@@ -26,7 +26,11 @@
         },
         "frameworks": {
           "netcoreapp3.1": {
-            "projectReferences": {}
+            "projectReferences": {
+              "C:\\Users\\taylo\\Documents\\Directories\\Git\\intro-to-algorithms\\LibraryManagement\\LibraryManagement.csproj": {
+                "projectPath": "C:\\Users\\taylo\\Documents\\Directories\\Git\\intro-to-algorithms\\LibraryManagement\\LibraryManagement.csproj"
+              }
+            }
           }
         },
         "warningProperties": {
@@ -54,6 +58,17 @@
           },
           "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.201\\RuntimeIdentifierGraph.json"
         }
+      }
+    },
+    "C:\\Users\\taylo\\Documents\\Directories\\Git\\intro-to-algorithms\\LibraryManagement\\LibraryManagement.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Users\\taylo\\Documents\\Directories\\Git\\intro-to-algorithms\\LibraryManagement\\LibraryManagement.csproj",
+        "projectName": "LibraryManagement",
+        "projectPath": "C:\\Users\\taylo\\Documents\\Directories\\Git\\intro-to-algorithms\\LibraryManagement\\LibraryManagement.csproj"
+      },
+      "frameworks": {
+        "net472": {}
       }
     }
   }
