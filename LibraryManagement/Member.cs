@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace LibraryManagement
 {
-    class Member
+    public class Member
     {
         // initialisation
-        private string firstName;
-        private string lastName;
+        //private string firstName;
+        //private string lastName;
         private string fullName;
         private string address;
         private string phoneNumber;
@@ -20,12 +20,11 @@ namespace LibraryManagement
         private int password;
 
         // constructors
-        public Member(string firstName, string lastName, string address, string phoneNumber, Movie[] movies)
+        public Member(string firstName, string lastName, string address, string phoneNumber)
         {
             fullName = firstName + " " + lastName;
             this.address = address;
             this.phoneNumber = phoneNumber;
-            this.movies = movies;
             username = lastName + firstName;
             password = -1; // means that password has not yet been set. prompt user to change password before first login  
         }
@@ -49,7 +48,22 @@ namespace LibraryManagement
             set { phoneNumber = value; }
         }
 
-        // what do i do about the movies array??
+        public Movie[] Movies
+        {
+            get { return movies; }
+            set { movies = value; }
+        }
 
+        public string Username
+        {
+            get { return username; }
+            set { username = value; }
+        }
+
+        public int Password
+        {
+            get { return password; }
+            set { password = value; }
+        }
     }
 }

@@ -1,6 +1,8 @@
 ﻿using System;
 using System.ComponentModel.Design;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 using System.Net;
 using System.Reflection.Metadata;
 using System.Runtime.InteropServices;
@@ -11,12 +13,20 @@ namespace CommunityLibrary
 {
     class Program
     {
+        // to do:
+        // implement 'change password' feature on login (and remaining login functionality)
+        // add movies to the 'borrowed movies' array for members
+        // check slack to see if we can do this???
+
+        public static MovieCollection movieCollection = new MovieCollection();
+        public static Member[] members = new Member[10];
+        
         static void DisplayMainMenu()
         {
-            // Reset the console
+            // reset the console
             Console.Clear();
 
-            // Display main menu
+            // display main menu
             Console.WriteLine("Welcome to the Community Library");
             Console.WriteLine("=========== Main Menu ===========");
             Console.WriteLine("1. Staff Login");
@@ -31,29 +41,45 @@ namespace CommunityLibrary
             string username;
             string password;
 
+            bool attempted = false;
+
             do {
-                // Reset the console
+                // reset the console
                 Console.Clear();
 
-                // should add an error message ?
+                // error message if user input was incorrect
+                if (attempted)
+                {
+                    Console.WriteLine("Incorrect username or password. Insert 0 to return to the main menu or ENTER to try again.");
+                    string response = Console.ReadLine();
 
+                    if (response == "0")
+                    {
+                        FunctionalMainMenu();
+                    }
+                }
+
+                // input username
                 Console.Write("Please enter your staff username: ");
                 username = Console.ReadLine().ToString();
 
+                // input password 
                 Console.Write("Please enter your staff password: ");
-                password = Console.ReadLine().ToString(); // do we need to censor password?
+                password = Console.ReadLine().ToString();
 
-            } while (username != "staff" || password != "today123");
+                attempted = true; // counter to indicate that the error message should be shown next time (if input was incorrect)
+
+            } while (username != "staff" || password != "today123"); // default username and password for all staff members
 
             FunctionalStaffMenu();
         }
 
         static void DisplayStaffMenu()
         {
-            // Reset the console
+            // reset the console
             Console.Clear();
 
-            // Display staff menu
+            // display staff menu
             Console.WriteLine("=========== Staff Menu ===========");
             Console.WriteLine("1. Add a new movie DVD");
             Console.WriteLine("2. Remove a movie DVD");
@@ -71,42 +97,111 @@ namespace CommunityLibrary
 
             // Entering movie details
             // need to check validity of each input individually
+            
+            // heading
             Console.WriteLine("1. Add a new movie");
             Console.WriteLine("");
 
+            // insert movie title
             Console.Write("Movie title: ");
             string ttl = Console.ReadLine().ToString();
+            ttl = ttl.Trim(); // remove spaces at the start and end of string
 
+            // insert starring actors
+            // need to account for no input
+            // need to account for double comma
             Console.Write("Starring actors (separated by commas): ");
-            string star = Console.ReadLine().ToString(); // still need to separate this out
-            string[] starArray = StringSplitOptions(star);
+            string star = Console.ReadLine().ToString(); 
+            string[] starArray = star.Split(','); // split according to the commas
+            for (int i = 0; i < starArray.Length; i++)
+            {
+                starArray[i] = starArray[i].Trim(); // remove spaces at the start and end of string
+            }
 
+            // insert director
             Console.Write("Director: ");
             string dir = Console.ReadLine().ToString();
+            dir = dir.Trim(); // remove spaces at the start and end of string
 
+            // insert duration
             Console.Write("Duration: ");
             int dur = int.Parse(Console.ReadLine());
 
-            Console.Write("Genre (Drama, Adventure, Family, Action, SciFi, Comedy, Animated, Thriller or Other)"); // not case sensitive
-            string gen = Console.ReadLine().ToString(); // convert this to Genre
+            // insert genre
+            Console.WriteLine("Choose the movie's genre from the selection below (0-8):");
+            Console.WriteLine("0. Drama");
+            Console.WriteLine("1. Adventure");
+            Console.WriteLine("2. Family");
+            Console.WriteLine("3. Action");
+            Console.WriteLine("4. Sci Fi");
+            Console.WriteLine("5. Comedy");
+            Console.WriteLine("6. Animated");
+            Console.WriteLine("7. Thriller");
+            Console.WriteLine("8. Other");
 
-            Console.Write("Classification (General (G), ParentalGuidance (PG), Mature (M) or MatureAccompanied (MA)): "); // not case sensitive // maybe remove spaces too?
-            string classif = Console.ReadLine().ToString(); // convert this to Classification
+            Movie.Genre gen;
 
+            if (int.TryParse(Console.ReadLine(), out int genInput))
+            {
+                if (Enum.IsDefined(typeof(Movie.Genre), genInput))
+                {
+                    gen = (Movie.Genre)genInput;
+                } 
+                else
+                {
+                    gen = 0;
+                }
+            }
+            else
+            {
+                gen = 0;
+            }
+
+            // insert classification
+            Console.WriteLine("Choose the movie's classification from the selection below (0-3):");
+            Console.WriteLine("0. General (G)");
+            Console.WriteLine("1. Parental Guidance (PG)");
+            Console.WriteLine("2. Mature (M)");
+            Console.WriteLine("3. Mature Acccompanied (MA)");
+
+            Movie.Classification classif;
+
+            if (int.TryParse(Console.ReadLine(), out int classifInput))
+            {
+                if (Enum.IsDefined(typeof(Movie.Classification), classifInput))
+                {
+                    classif = (Movie.Classification)classifInput;
+                } 
+                else
+                {
+                    classif = 0;
+                }
+            }
+            else
+            {
+                classif = 0;
+            }
+
+            // insert release date
             Console.Write("Release Date (dd-mm-yyyy): ");
             string relDate = Console.ReadLine().ToString();
 
+            // insert available copies
             Console.Write("Available copies: ");
-            string availCopies = Console.ReadLine().ToString();
+            int availCopies = Convert.ToInt32(Console.ReadLine());
 
-            LibraryManagement.Movie movie = new Movie(ttl, starArray, dir, dur, gen, classif, relDate); //add available copies
+            // use all user input to create a Movie instance
+            Movie addedMovie = new Movie(ttl, starArray, dir, dur, gen, classif, relDate, availCopies); // add available copies
 
-            // use movie constructor here to add to movie collection. start with list ?
-        }
+            bool status = MovieCollection.AddMovieToTree(movieCollection, addedMovie);
 
-        private static string[] StringSplitOptions(string star)
-        {
-            throw new NotImplementedException();
+            // if the movie was successfully added to the BST
+            if (status)
+            {
+                Console.WriteLine("");
+                Console.WriteLine("Movie successfully added. Press any key to return to the staff menu.");
+                Console.ReadKey();
+            }
         }
 
         static void RemoveMovie()
@@ -135,24 +230,58 @@ namespace CommunityLibrary
             Console.Write("Phone number: ");
             string num = Console.ReadLine().ToString();
 
+            Member addedMember = new Member(fname, lname, addr, num);
+            bool addStatus = MemberCollection.AddMemberToArray(addedMember, members);
 
-            // Message shown on successful/unsuccessful registration
-            
-            // LibraryManagement.Member new = new Member;
+            if (addStatus)
+            {
+                Console.WriteLine();
+                Console.WriteLine("Member registration successful.");
+                Console.WriteLine("The member's username is " + lname + fname + ".");
+                Console.WriteLine("The member will be prompted to choose a 4-digit password when first logging in.");
+                Console.WriteLine();
+            }
 
-            // add an instance to member collection using (name, addr, num)
-
-            Console.WriteLine("");
-            Console.WriteLine("New member successfully created!"); // check that it was actually created.
-            // Press 1 to add another new member, 2 to return to staff menu, 3 to return to main menu, 4 to exit
+            Console.WriteLine("Press any key to return to the staff menu.");
+            Console.ReadKey();
         }
         
         static void FindPhoneNumber()
         {
+            Console.Clear();
+
             Console.WriteLine("4. Find a registered member's phone number");
-            Console.WriteLine("");
+            Console.WriteLine();
             Console.Write("Please enter the member's full name: ");
-            // use getter with name to return phone number
+            
+            string userInput = Console.ReadLine();
+            MemberCollection.SearchForMemberInArray(userInput, members);
+
+            Console.WriteLine("Press any key to return to the staff menu.");
+            Console.ReadKey();
+        }
+
+        static void BorrowMovie(string movieTitle)
+        {
+            Movie searchedMovie = MovieCollection.FindMovieInTree(movieTitle).data;
+            
+            // nested if statement to check if they already have it (which gives different error codes)
+            if (searchedMovie.CopiesAvailable > 0) // AND they do not currently have it...
+            {
+                searchedMovie.CopiesAvailable -= 1;
+                searchedMovie.BorrowHistory += 1;
+                // add it to their list of movies
+            } else
+            {
+                Console.WriteLine("Sorry, there are currently no copies of this movie available.");
+            }
+        }
+
+        static void ReturnMovie(string movieTitle)
+        {
+            Movie searchedMovie = MovieCollection.FindMovieInTree(movieTitle).data;
+
+            // if they have the movie...
         }
 
         static void DisplayMemberLogin()
@@ -173,8 +302,8 @@ namespace CommunityLibrary
                 // while get(username).password == -1,
                 // show the screen which gets them to set password
 
-                Console.Write("Please enter your staff password: ");
-                password = Console.ReadLine().ToString(); // do we need to censor password?
+                Console.Write("Please enter your member password: ");
+                password = Console.ReadLine().ToString(); 
 
             } while (username != "staff" || password != "today123"); // change this...
 
@@ -238,7 +367,7 @@ namespace CommunityLibrary
                         break;
 
                     case "2":
-                        RemoveMovie();// remove a movie DVD
+                        RemoveMovie(); // remove a movie DVD
                         break;
 
                     case "3":
@@ -263,11 +392,15 @@ namespace CommunityLibrary
             do
             {
                 DisplayMemberMenu();
-                memberMenuSelection = Console.ReadKey().ToString();
+                memberMenuSelection = Console.ReadLine().ToString();
 
                 switch (memberMenuSelection)
                 {
-                    case "1":
+                    case "1": // display all movies
+                        Console.Clear();
+                        MovieCollection.DisplayAllMoviesInTree();
+                        Console.WriteLine("Press any key to return to the member menu.");
+                        Console.ReadKey();
                         break;
 
                     case "2":

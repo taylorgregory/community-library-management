@@ -7,14 +7,27 @@
   "targets": {
     ".NETCoreApp,Version=v3.1": {
       "CommunityLibrary/1.0.0": {
+        "dependencies": {
+          "LibraryManagement": "1.0.0"
+        },
         "runtime": {
           "CommunityLibrary.dll": {}
+        }
+      },
+      "LibraryManagement/1.0.0": {
+        "runtime": {
+          "LibraryManagement.dll": {}
         }
       }
     }
   },
   "libraries": {
     "CommunityLibrary/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "LibraryManagement/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""
