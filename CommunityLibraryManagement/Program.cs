@@ -8,6 +8,7 @@ using System.Reflection.Metadata;
 using System.Runtime.InteropServices;
 using System.Xml.Serialization;
 using LibraryManagement;
+using System.Text.RegularExpressions;
 
 namespace CommunityLibrary
 {
@@ -289,25 +290,77 @@ namespace CommunityLibrary
             string username;
             string password;
 
+            bool attemptedLogin = false;
+            bool attemptedPasswordSet = false;
+            bool validPassword = true;
+
             do
             {
                 // Reset the console
                 Console.Clear();
 
-                // should add an error message ?
+                if (attemptedLogin)
+                {
+                    Console.WriteLine("Incorrect username or password. Insert 0 to return to the main menu or ENTER to try again.");
+                    string response = Console.ReadLine();
 
+                    if (response == "0")
+                    {
+                        FunctionalMainMenu();
+                    }
+                }
+
+                // input username
                 Console.Write("Please enter your member username: ");
                 username = Console.ReadLine().ToString();
 
-                // while get(username).password == -1,
-                // show the screen which gets them to set password
+                // looping through all members
+                for (int i = 0; i < members.Length; i++)
+                {
+                    // if the username exists but the password has not yet been set
+                    if (members[i] != null && username == members[i].Username && members[i].Password == "none")
+                    {
+                        Console.WriteLine("You have not yet set your password. Please enter a 4-digit pin to continue.");
+                        do
+                        {
+                            if (attemptedPasswordSet)
+                            {
+                                Console.Clear();
+                                Console.WriteLine("This is an invalid password. Passwords must be a 4-digit pin. Please try again.");
+                            }
+
+                            password = Console.ReadLine().ToString();
+
+                            Regex rgx = new Regex(@"^[0-9]{4}$"); // password must be 4 digits 
+                            validPassword = rgx.IsMatch(password);
+                            attemptedPasswordSet = true;
+
+                        } while (!validPassword);
+
+                        members[i].Password = password; 
+                        Console.WriteLine("Password was successfully set. Press any key to continue to the member menu.");
+                        Console.ReadKey();
+                        FunctionalMemberMenu();
+                        break;
+                    }
+                }
 
                 Console.Write("Please enter your member password: ");
-                password = Console.ReadLine().ToString(); 
+                password = Console.ReadLine().ToString();
 
-            } while (username != "staff" || password != "today123"); // change this...
-
-            FunctionalMemberMenu();
+                for (int i = 0; i < members.Length; i++)
+                {
+                    if (members[i] != null && username == members[i].Username && password == members[i].Password)
+                    {
+                        FunctionalMemberMenu();
+                        break;
+                    }
+                    else
+                    {
+                        attemptedLogin = true;
+                    }
+                }
+            } while (attemptedLogin); 
         }
 
         static void DisplayMemberMenu()
@@ -320,7 +373,7 @@ namespace CommunityLibrary
             Console.WriteLine("1. Display all movies");
             Console.WriteLine("2. Borrow a movie DVD");
             Console.WriteLine("3. Return a movie DVD");
-            Console.WriteLine("4. List current borrowed movie DVDs");
+            Console.WriteLine("4. List currently borrowed movie DVDs");
             Console.WriteLine("5. Display top 10 most popular movies");
             Console.WriteLine("0. Return to main menu");
             Console.WriteLine("===================================");
@@ -404,15 +457,20 @@ namespace CommunityLibrary
                         break;
 
                     case "2":
+                        for (int i = 0; i < 3; i++)
+                        {
+                            Console.WriteLine("hi"+members[i].FullName+"hi");
+                        }
+                        Console.ReadKey();// borrow a movie
                         break;
 
-                    case "3":
+                    case "3": // return a movie
                         break;
 
-                    case "4":
+                    case "4": // list currently borrowed movies
                         break;
 
-                    case "5":
+                    case "5": // show top 10 popular movies
                         break;
 
                     case "0":
