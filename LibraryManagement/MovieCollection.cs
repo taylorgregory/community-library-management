@@ -37,9 +37,12 @@ namespace LibraryManagement
                 if (string.Compare(movieNodeName, after.data.Title) == -1) // movieNodeName is first alphabetically, so move to the left of the BST
                 {
                     after = after.left;
-                } else if (string.Compare(movieNodeName, after.data.Title) == 1) { // after.data.Title is first alphabetically, so move to the right of the BST
+                } 
+                else if (string.Compare(movieNodeName, after.data.Title) == 1) 
+                { // after.data.Title is first alphabetically, so move to the right of the BST
                     after = after.right;
-                } else // movies have the same title and are rejected (no duplicate titles allowed)
+                } 
+                else // movies have the same title and are rejected (no duplicate titles allowed)
                 {
                     return false;
                 }
@@ -51,7 +54,9 @@ namespace LibraryManagement
             if (movCol.Root == null) // if this is the beginning of the tree (i.e. there is no previous root)
             {
                 movCol.Root = insertedNode; // the new node becomes the root
-            } else {
+            } 
+            else 
+            {
                 if (string.Compare(movieNodeName, before.data.Title) == -1) 
                 {
                     before.left = insertedNode; // movieNodeName is first alphabetically, so place it to the left of the BST
@@ -59,16 +64,60 @@ namespace LibraryManagement
                     before.right = insertedNode; // after.data.Tile is first alphabetically, so place it to the right of the BST
                 }
             }
-
             return true;
         }
 
-        //public bool RemoveMovieFromTree(Movie movie)
-        //{
-        // remove a movie
-        // search binary search tree to find corresponding tree node 
-        // remove the node from the tree
-        //}
+
+        public static void RemoveMovieFromTree(Movie movie)
+        { 
+            root = RemoveMovieFromTree(root, movie);
+        }
+
+        private static TreeNode RemoveMovieFromTree(TreeNode parent, Movie movie)
+        {
+            if (parent == null)
+            {
+                return parent;
+            }
+
+            if (string.Compare(movie.Title, parent.data.Title) == -1) // if movie comes first alphabetically
+            {
+                parent.left = RemoveMovieFromTree(parent.left, movie);
+            }
+            else if (string.Compare(movie.Title, parent.data.Title) == -1) // if parent comes first alphabetically
+            {
+                parent.right = RemoveMovieFromTree(parent.right, movie);
+            }
+            // if value is same as parent's value, then this is the node to be deleted  
+            else
+            {
+                // node with only one child or no child  
+                if (parent.left == null)
+                    return parent.right;
+                else if (parent.right == null)
+                    return parent.left;
+
+                // node with two children: Get the first alphabetically in the right subtree
+                parent.data = FirstAlph(parent.right);
+
+                // Delete the first alphabetically in the right subtree  
+                parent.right = RemoveMovieFromTree(parent.right, parent.data);
+            }
+
+            return parent;
+        }
+
+        private static Movie FirstAlph(TreeNode node)
+        {
+            Movie FAlph = node.data;
+
+            while (node.left != null)
+            {
+                FAlph = node.left.data;
+                node = node.left;
+            }
+            return FAlph;
+        }
 
         public static TreeNode FindMovieInTree(string title)
         {

@@ -203,7 +203,20 @@ namespace CommunityLibrary
 
         static void RemoveMovie()
         {
-            // ?
+            Console.WriteLine("Input the name of the movie you would like removed:");
+            string input = Console.ReadLine();
+            Movie removedMovie = MovieCollection.FindMovieInTree(input).data;
+
+            if (removedMovie.TotalCopies != removedMovie.CopiesAvailable)
+            {
+                Console.WriteLine("All movie copies must be returned before removing a movie from the system. Please try again later.");
+            } 
+            else
+            {
+                MovieCollection.RemoveMovieFromTree(removedMovie);
+                Console.WriteLine(removedMovie.Title + " was successfully removed. Press any key to return to the staff menu.");
+                Console.ReadKey();
+            }
         }
 
         static void RegisterMember()
@@ -560,11 +573,91 @@ namespace CommunityLibrary
                         break;
                 }
             } while (memberMenuSelection != "0");
+        }
 
+        static void CreateDummyUsers()
+        {
+            Member member1 = new Member("Bec", "McMahon", "34 Fairfield Avenue, Norman Gardens", "0447635285");
+            member1.Password = "1234";
+            MemberCollection.AddMemberToArray(member1, members);
+
+            Member member2 = new Member("Sam", "Olive", "3 Treseder Street, The Range", "0466659547");
+            member2.Password = "3456";
+            MemberCollection.AddMemberToArray(member2, members);
+
+            Member member3 = new Member("Natalie", "Robina", "7 Flanagan Street, Frenchville", "0422433309");
+            member3.Password = "9598";
+            MemberCollection.AddMemberToArray(member3, members);
+        }
+
+        static void CreateDummyMovies()
+        {
+            Movie movie1 = new Movie("Forrest Gump", new string[]{ "Tom Hanks", "Robin Wright", "Gary Sinise" }, "Robert Zemeckis", 142, Movie.Genre.Family, Movie.Classification.ParentalGuidance, "17-11-1994", 3);
+            movie1.BorrowHistory = 4;
+            MovieCollection.AddMovieToTree(movieCollection, movie1);
+
+            Movie movie2 = new Movie("School of Rock", new string[] { "Jack Black", "Miranda Cosgrove" }, "Richard Linklater", 109, Movie.Genre.Comedy, Movie.Classification.General, "20-11-2003", 2);
+            movie2.BorrowHistory = 2;
+            MovieCollection.AddMovieToTree(movieCollection, movie2);
+
+            Movie movie3 = new Movie("Finding Nemo", new string[] { "Albert Brooks", "Alexander Gould", "Barry Humphries" }, "Andrew Stanton", 100, Movie.Genre.Animated, Movie.Classification.General, "28-08-2003", 3);
+            movie3.BorrowHistory = 5;
+            MovieCollection.AddMovieToTree(movieCollection, movie3);
+
+            Movie movie4 = new Movie("Avatar", new string[] { "Zoe Saldana", "Sam Worthington", "Michelle Rodriguez" }, "James Cameron", 162, Movie.Genre.SciFi, Movie.Classification.Mature, "17-12-2009", 4);
+            movie4.BorrowHistory = 1;
+            MovieCollection.AddMovieToTree(movieCollection, movie4);
+
+            Movie movie5 = new Movie("Ten Things I Hate About You", new string[] { "Heath Ledger", "Julia Stiles"}, "Gill Junger", 99, Movie.Genre.Comedy, Movie.Classification.Mature, "31-03-1999", 2);
+            movie5.BorrowHistory = 4;
+            MovieCollection.AddMovieToTree(movieCollection, movie5);
+
+            Movie movie6 = new Movie("Bridge to Terabithia", new string[] { "AnnaSophia Robb", "Josh Hutcherson", "Bailee Madison" }, "Gabor Csupo", 96, Movie.Genre.Adventure, Movie.Classification.Mature, "14-06-2007", 1);
+            movie6.BorrowHistory = 0;
+            MovieCollection.AddMovieToTree(movieCollection, movie6);
+
+            Movie movie7 = new Movie("Titanic", new string[] { "Leonardo DiCaprio", "Kate Winslet" }, "James Cameron", 195, Movie.Genre.Drama, Movie.Classification.Mature, "17-12-1997", 3);
+            movie7.BorrowHistory = 2;
+            MovieCollection.AddMovieToTree(movieCollection, movie7);
+
+            Movie movie8 = new Movie("Back to the Future", new string[] { "Michael J. Fox", "Christopher Lloyd", "Lea Thompson" }, "Robert Zemeckis", 116, Movie.Genre.Adventure, Movie.Classification.ParentalGuidance, "15-18-1985", 2);
+            movie8.BorrowHistory = 3;
+            MovieCollection.AddMovieToTree(movieCollection, movie8);
+
+            Movie movie9 = new Movie("The Wolf of Wall Street", new string[] { "Margot Robbie", "Leonardo DiCaprio" }, "Martin Scorsese", 180, Movie.Genre.Drama, Movie.Classification.MatureAccompanied, "23-01-2014", 2);
+            movie9.BorrowHistory = 5;
+            MovieCollection.AddMovieToTree(movieCollection, movie9);
+
+            Movie movie10 = new Movie("Jurassic Park", new string[] { "Jeff Goldblum", "Laura Dern", "Sam Neill" }, "Steven Spielberg", 127, Movie.Genre.Adventure, Movie.Classification.ParentalGuidance, "02-09-1993", 1);
+            movie10.BorrowHistory = 0;
+            MovieCollection.AddMovieToTree(movieCollection, movie10);
+
+            Movie movie11 = new Movie("Die Hard", new string[] { "Bruce Willis", "Alan Rickman" }, "John McTiernan", 132, Movie.Genre.Action, Movie.Classification.MatureAccompanied, "06-10-1988", 1);
+            movie11.BorrowHistory = 0;
+            MovieCollection.AddMovieToTree(movieCollection, movie11);
+
+            Movie movie12 = new Movie("Easy A", new string[] { "Emma Stone", "Amanda Bynes", "Penn Badgley" }, "Will Gluck", 92, Movie.Genre.Comedy, Movie.Classification.Mature, "16-09-2010", 3);
+            movie12.BorrowHistory = 3;
+            MovieCollection.AddMovieToTree(movieCollection, movie12);
+
+            Movie movie13 = new Movie("Shrek", new string[] { "Mike Myers", "Eddie Murphy", "Cameron Diaz" }, "Andrew Adamson", 95, Movie.Genre.Animated, Movie.Classification.General, "21-06-2001", 2);
+            movie13.BorrowHistory = 4;
+            MovieCollection.AddMovieToTree(movieCollection, movie13);
+
+            Movie movie14 = new Movie("Ferris Bueller's Day Off", new string[] { "Matthew Broderick", "Mia Sara" }, "John Hughes", 103, Movie.Genre.Comedy, Movie.Classification.ParentalGuidance, "21-08-1986", 3);
+            movie14.BorrowHistory = 2;
+            MovieCollection.AddMovieToTree(movieCollection, movie14);
+
+            Movie movie15 = new Movie("Jumanji", new string[] { "Karen Gillan", "Dwayne Johnson" }, "Jake Kasdan", 123, Movie.Genre.Action, Movie.Classification.Mature, "26-12-2019", 1);
+            movie15.BorrowHistory = 0;
+            MovieCollection.AddMovieToTree(movieCollection, movie15);
         }
 
         static void Main(string[] args)
         {
+            CreateDummyUsers();
+            CreateDummyMovies();
+
             FunctionalMainMenu();
         }
     }
