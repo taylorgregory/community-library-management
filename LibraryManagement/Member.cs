@@ -8,6 +8,7 @@ namespace LibraryManagement
 {
     public class Member
     {
+        // initialisation / getters and setters
         public string FullName { get; set; }
         public string Address { get; set; }
         public string PhoneNumber { get; set; }
@@ -18,10 +19,10 @@ namespace LibraryManagement
         // constructor
         public Member(string firstName, string lastName, string address, string phoneNumber)
         {
-            FullName = firstName + " " + lastName;
+            FullName = firstName + " " + lastName; // full name is constructed based on user input for first name and last name
             Address = address;
             PhoneNumber = phoneNumber;
-            Movies = null; // not sure if this is correct?
+            Movies = null; // no movies borrowed at this point
             Username = lastName + firstName;
             Password = "none"; // means that password has not yet been set. prompt user to change password before first login  
         }

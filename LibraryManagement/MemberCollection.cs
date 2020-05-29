@@ -8,18 +8,24 @@ namespace LibraryManagement
 {
     public class MemberCollection
     {
+        // initialisation/getters and setters 
         public static Member[] MemberArray { get; set; }
         public static int MemIncrement { get; set; }
 
         public static bool AddMemberToArray(Member member, Member[] memArray)
         {
+            // method to add a new member to the member array
+            // checks if member capacity has been reached and if there is already a member registered with the same full name
+            // input: the member to be added, the array that the member will be added to
+            // output: boolean value to indicate if the member was successfully added to the member array
+
             for (int i = 0; i < memArray.Length; i++)
             {
                 if (memArray[i] == null)
                 {
                     break;
                 }
-                else if (memArray[i].FullName == member.FullName)
+                else if (memArray[i].FullName == member.FullName) // duplicate full names are not allowed
                 {
                     Console.WriteLine();
                     Console.WriteLine("A user with this name is already registered. Please use another name.");
@@ -48,10 +54,13 @@ namespace LibraryManagement
 
         public static void SearchForMemberInArray(string fullName, Member[] memArray)
         {
+            // method to search for a member in the array and print their phone number
+            // input: full name of the member, the member array that will be searched 
+
             bool found = false;
             for (int i = 0; i < memArray.Length; i++)
             {
-                if (memArray[i] != null && memArray[i].FullName == fullName)
+                if (memArray[i] != null && memArray[i].FullName == fullName) // if there is a member that corresponds to the entered full name
                 {
                     found = true;
                     Console.WriteLine();

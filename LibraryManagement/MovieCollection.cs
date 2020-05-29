@@ -12,10 +12,10 @@ namespace LibraryManagement
 {
     public class MovieCollection
     {
-        private static TreeNode root;
-        public static int index = 0;
+        private static TreeNode root; // global variable root for the BST root
+        public static int index = 0; // index to keep track of index when traversing the BST (and adding to array)
 
-        // getters and setters
+        // getter and setter
         public TreeNode Root
         {
             get { return root; }
@@ -24,6 +24,10 @@ namespace LibraryManagement
 
         public static bool AddMovieToTree(MovieCollection movCol, Movie movie)
         {
+            // adds movie to BST according to alphabetical order of title
+            // input: movie collection that the movie will be added to, the movie that will be added
+            // output: boolean value indicating whether the movie was successfully added to the tree or not
+
             string movieNodeName = movie.Title;
 
             // using the root as the starting point
@@ -35,13 +39,13 @@ namespace LibraryManagement
             while (after != null)
             {
                 before = after;
-                if (string.Compare(movieNodeName, after.data.Title) == -1) // movieNodeName is first alphabetically, so move to the left of the BST
+                if (string.Compare(movieNodeName, after.data.Title) == -1) 
                 {
-                    after = after.left;
+                    after = after.left; // movieNodeName is first alphabetically, so move to the left of the BST
                 } 
                 else if (string.Compare(movieNodeName, after.data.Title) == 1) 
-                { // after.data.Title is first alphabetically, so move to the right of the BST
-                    after = after.right;
+                { 
+                    after = after.right; // after.data.Title is first alphabetically, so move to the right of the BST
                 } 
                 else // movies have the same title and are rejected (no duplicate titles allowed)
                 {
@@ -70,12 +74,18 @@ namespace LibraryManagement
 
 
         public static void RemoveMovieFromTree(Movie movie)
-        { 
-            root = RemoveMovieFromTree(root, movie);
+        {
+            // public method to remove movie from BST
+            // input: movie that will be removed from tree
+
+            root = RemoveMovieFromTree(root, movie); // calling the private method with the root specified
         }
 
         private static TreeNode RemoveMovieFromTree(TreeNode parent, Movie movie)
         {
+            // private method to remove movie from BST
+            // input: parent of the tree (in this case, the root), the movie that will be removed from the tree
+
             if (parent == null)
             {
                 return parent;
@@ -89,8 +99,7 @@ namespace LibraryManagement
             {
                 parent.right = RemoveMovieFromTree(parent.right, movie);
             }
-            // if value is same as parent's value, then this is the node to be deleted  
-            else
+            else // if value is same as parent's value, then this is the node to be deleted  
             {
                 // node with only one child or no child  
                 if (parent.left == null)
@@ -98,10 +107,10 @@ namespace LibraryManagement
                 else if (parent.right == null)
                     return parent.left;
 
-                // node with two children: Get the first alphabetically in the right subtree
+                // node with two children: get the first alphabetically in the right subtree
                 parent.data = FirstAlph(parent.right);
 
-                // Delete the first alphabetically in the right subtree  
+                // delete the first alphabetically in the right subtree  
                 parent.right = RemoveMovieFromTree(parent.right, parent.data);
             }
 
@@ -110,6 +119,10 @@ namespace LibraryManagement
 
         private static Movie FirstAlph(TreeNode node)
         {
+            // method to determine which movie is first alphabetically in the tree
+            // input: specified TreeNode
+            // this method is called in RemoveMovieFromTree()
+
             Movie FAlph = node.data;
 
             while (node.left != null)
@@ -122,22 +135,28 @@ namespace LibraryManagement
 
         public static TreeNode FindMovieInTree(string title)
         {
-            return FindMovieInTree(title, root);
+            // public method to find movie in BST
+            // input: title of movie that is searched for in BST
+
+            return FindMovieInTree(title, root); // calling the private method with the root specified
         }
 
         private static TreeNode FindMovieInTree(string title, TreeNode parent)
         {
+            // private method to find movie in BST
+            // input: title of movie that is searched for in BST, parent of the tree (in this case, the root)
+
             if (parent != null)
             {
-                if (title == parent.data.Title)
+                if (title == parent.data.Title) // if title is equal to the parent title then we are done (i.e. we have found the movie)
                 {
                     return parent;
                 }
-                if (string.Compare(title, parent.data.Title) == -1)
+                if (string.Compare(title, parent.data.Title) == -1) // if title is earlier than the parent alphabetically 
                 {
                     return FindMovieInTree(title, parent.left);
                 }
-                else
+                else 
                 {
                     return FindMovieInTree(title, parent.right);
                 }
@@ -147,38 +166,46 @@ namespace LibraryManagement
 
         public static void DisplayAllMoviesInTree()
         {
-            // in-order tree traversal to display movies alphabetically
-            DisplayAllMoviesInTree(root);
+            // private method for in-order tree traversal to display movies alphabetically
+
+            DisplayAllMoviesInTree(root); // calling private method with root specified
         }
 
         private static void DisplayAllMoviesInTree(TreeNode Root)
         {
-            // in-order tree traversal to display movies alphabetically
+            // public method for in-order tree traversal to display movies alphabetically
+            // input: root of the tree
+
             if (Root == null)
             {
                 return;
             }
             
             DisplayAllMoviesInTree(Root.left);
-            TreeNode.DisplayData(Root);
+            TreeNode.DisplayData(Root); // calls a TreeNode method which prints relevant movie information to the screen
             DisplayAllMoviesInTree(Root.right);
         }
 
         public static Movie[] PutAllMoviesInArray(Movie[] movies)
         {
-            return PutAllMoviesInArray(root, movies);
+            // public method to add all movies to an array from BST based on an in-order traversal
+            // input: the movie array that the movies are being added to
+
+            return PutAllMoviesInArray(root, movies); // calling the private method with the root specified
         }
 
         private static Movie[] PutAllMoviesInArray(TreeNode Root, Movie[] movies)
         {
-            // in order traversal to put all movies into an array. note that the array is pre-defined
+            // private method to add all movies to an array from BST based on an in-order traversal
+            // input: the root of the tree/subtree, the movie array that the movies are being added to
+
             if (Root == null)
             {
                 return null;
             }
 
             PutAllMoviesInArray(Root.left, movies);
-            movies[index++] = Root.data;
+            movies[index++] = Root.data; // incrementing the global variable index so the Root is added to the next position in the array
             PutAllMoviesInArray(Root.right, movies);
 
             return movies;
@@ -187,8 +214,8 @@ namespace LibraryManagement
         public static Movie[] SortByPopularity(Movie[] movArray)
         {
             // implementing bubble sort to sort the movie array in descending order
-
-            // this is not yet right... have not specified that we want to display popularity??
+            // input: unsorted movie array (with no null elements)
+            // output: sorted movie array (in descending order according to borrow history)
 
             for (int i = 0; i < movArray.Length; i++)
             {

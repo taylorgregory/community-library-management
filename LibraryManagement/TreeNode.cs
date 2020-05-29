@@ -9,12 +9,16 @@ namespace LibraryManagement
 {
     public class TreeNode
     {
+        // initialisation/getters and setters
         public TreeNode left { get; set; }
         public Movie data { get; set; }
         public TreeNode right { get; set; }
 
         public static void DisplayData(TreeNode node)
         {
+            // method to display all relevant information about a given movie with appropriate formatting 
+            // input: node that contains the movie that is to be displayed
+
             Console.WriteLine("Title: " + node.data.Title);
 
             Console.Write("Starring:");
@@ -36,8 +40,8 @@ namespace LibraryManagement
             Console.WriteLine("Release Date: " + node.data.ReleaseDate);
 
             Console.WriteLine("Available Copies: " + node.data.CopiesAvailable.ToString());
-            Console.WriteLine();
 
+            Console.WriteLine();
         }
     }
 }

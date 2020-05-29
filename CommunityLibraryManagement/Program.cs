@@ -15,13 +15,16 @@ namespace CommunityLibrary
 {
     class Program
     {
-        public static MovieCollection movieCollection = new MovieCollection();
-        public static Member[] members = new Member[10];
+        // class for the console app
+
+        public static MovieCollection movieCollection = new MovieCollection(); // creating new BST to store movies
+        public static Member[] members = new Member[10]; // assuming maximum of 10 members in the system
         public static Movie[] movieArray = new Movie[25]; // assuming a maximum of 25 movies in the system
         
         static void DisplayMainMenu()
         {
-            // display main menu
+            // displays the main menu functionality
+
             Console.WriteLine("Welcome to the Community Library");
             Console.WriteLine("=========== Main Menu ===========");
             Console.WriteLine("1. Staff Login");
@@ -33,10 +36,13 @@ namespace CommunityLibrary
 
         static void DisplayStaffLogin()
         {
+            // function that is called after 'staff login' is selected on main menu
+            // handles staff credentials for login attempts
+
             string username;
             string password;
 
-            bool attempted = false;
+            bool attempted = false; // initially false so error message is not displayed at the start
 
             do {
                 Console.Clear();
@@ -47,9 +53,9 @@ namespace CommunityLibrary
                     Console.WriteLine("Incorrect username or password. Insert 0 to return to the main menu or ENTER to try again.");
                     string response = Console.ReadLine();
 
-                    if (response == "0")
+                    if (response == "0") 
                     {
-                        FunctionalMainMenu();
+                        FunctionalMainMenu(); // return to the main menu
                     }
                 }
 
@@ -65,12 +71,13 @@ namespace CommunityLibrary
 
             } while (username != "staff" || password != "today123"); // default username and password for all staff members
 
-            FunctionalStaffMenu();
+            FunctionalStaffMenu(); // display staff menu if they escape the do-while loop (i.e. if credentials were correct)
         }
 
         static void DisplayStaffMenu()
         {
-            // display staff menu
+            // displays the staff menu functionality
+
             Console.WriteLine("=========== Staff Menu ===========");
             Console.WriteLine("1. Add a new movie DVD");
             Console.WriteLine("2. Remove a movie DVD");
@@ -83,23 +90,22 @@ namespace CommunityLibrary
 
         static void AddMovie()
         {
-            // Clear the console
-            Console.Clear();
+            // display that is shown when a staff member chooses to add a new movie to the system
+            // allows user input for title, actors, director, duration (must be int), genre, classification, release date, available copies (must be int)
+            // user input is used in Movie constructor to create a new Movie instance
+            // if input is valid, the new movie will be added to the BST and confirmation message will be printed
 
-            // Entering movie details
-
-            // heading
-            Console.WriteLine("1. Add a new movie");
+            Console.Clear(); 
+            Console.WriteLine("1. Add a new movie"); // heading
             Console.WriteLine("");
 
+            // -- entering movie details -- //
             // insert movie title
             Console.Write("Movie title: ");
             string ttl = Console.ReadLine().ToString();
             ttl = ttl.Trim(); // remove spaces at the start and end of string
 
             // insert starring actors
-            // -- need to account for no input
-            // -- need to account for double comma
             Console.Write("Starring actors (separated by commas): ");
             string star = Console.ReadLine().ToString(); 
             string[] starArray = star.Split(','); // split according to the commas
@@ -117,7 +123,7 @@ namespace CommunityLibrary
             Console.Write("Duration (min): ");
             string durInput = Console.ReadLine();
             int dur;
-            while (!int.TryParse(durInput, out dur))
+            while (!int.TryParse(durInput, out dur)) // ensuring that duration is an integer
             {
                 Console.Write("Error: Duration must be an integer. Please input the movie's duration in minutes: ");
                 durInput = Console.ReadLine();
@@ -136,8 +142,7 @@ namespace CommunityLibrary
             Console.WriteLine("8. Other");
 
             Movie.Genre gen;
-
-            if (int.TryParse(Console.ReadLine(), out int genInput))
+            if (int.TryParse(Console.ReadLine(), out int genInput)) 
             {
                 if (Enum.IsDefined(typeof(Movie.Genre), genInput))
                 {
@@ -161,7 +166,6 @@ namespace CommunityLibrary
             Console.WriteLine("3. Mature Acccompanied (MA)");
 
             Movie.Classification classif;
-
             if (int.TryParse(Console.ReadLine(), out int classifInput))
             {
                 if (Enum.IsDefined(typeof(Movie.Classification), classifInput))
@@ -186,25 +190,25 @@ namespace CommunityLibrary
             Console.Write("Available copies: ");
             string copyInput = Console.ReadLine();
             int availCopies;
-            while (!int.TryParse(copyInput, out availCopies))
+            while (!int.TryParse(copyInput, out availCopies)) // ensuring that available copies is an integer
             {
                 Console.Write("Error: Number of available copies must be an integer. Please try again: ");
                 copyInput = Console.ReadLine();
             }
 
             // use all user input to create a Movie instance
-            Movie addedMovie = new Movie(ttl, starArray, dir, dur, gen, classif, relDate, availCopies); // add available copies
+            Movie addedMovie = new Movie(ttl, starArray, dir, dur, gen, classif, relDate, availCopies);
 
+            // add movie to BST (alphabetical order according to title)
             bool status = MovieCollection.AddMovieToTree(movieCollection, addedMovie);
 
-            // if the movie was successfully added to the BST
-            if (status)
+            if (status) // if the movie was successfully added to the BST
             {
                 Console.WriteLine();
                 Console.WriteLine("Movie successfully added. Press any key to return to the staff menu.");
                 Console.ReadKey();
             } 
-            else
+            else 
             {
                 Console.WriteLine();
                 Console.WriteLine("Movie not added. Press any key to return to the staff menu.");
@@ -214,58 +218,76 @@ namespace CommunityLibrary
 
         static void RemoveMovie()
         {
+            // display that is shown when a staff member chooses to remove a movie from the system
+            // user inputs the title of the movie (must match exactly)
+            // if the user input does not match the title of a movie already in the system, an error message will be displayed
+            // if not all copies of the movie have been returned, an error message will be displayed
+
             Console.Clear();
+            Console.WriteLine("2. Remove a movie"); // heading
+            Console.WriteLine("");
+
             Console.WriteLine("Input the name of the movie you would like removed:");
             string input = Console.ReadLine();
 
-            if (MovieCollection.FindMovieInTree(input) != null)
+            if (MovieCollection.FindMovieInTree(input) != null) // checking if title matches a title in the system
             {
-                Movie removedMovie = MovieCollection.FindMovieInTree(input).data;
+                Movie removedMovie = MovieCollection.FindMovieInTree(input).data; // finding the movie corresponding to the user input
 
-                if (removedMovie.TotalCopies != removedMovie.CopiesAvailable)
+                if (removedMovie.TotalCopies != removedMovie.CopiesAvailable) // checking if there are any unreturned copies of the movie
                 {
                     Console.WriteLine("All movie copies must be returned before removing a movie from the system. Please try again later.");
                 }
-                else
+                else // if all copies have been returned
                 {
                     MovieCollection.RemoveMovieFromTree(removedMovie);
                     Console.WriteLine(removedMovie.Title + " was successfully removed. Press any key to return to the staff menu.");
                     Console.ReadKey();
                 }
             }
-            else
+            else // if title does not correspond to a movie in the system
             {
                 Console.WriteLine("Sorry, there are no records of " + input + " in our movie system.");
                 Console.ReadKey();
             }
-
-
         }
 
         static void RegisterMember()
         {
-            // Clear the console
-            Console.Clear();
+            // display that is shown when a staff member chooses to register a new member
+            // allows user input for first name, last name, address, phone number
+            // user input is used in Member constructor to create a new Member instance
+            // if input is valid, the new movie will be added to the member array and confirmation message will be printed
 
-            // Entering member details
-            Console.WriteLine("3. Register a new member");
+            Console.Clear(); 
+            Console.WriteLine("3. Register a new member"); // heading
             Console.WriteLine("");
-            
+
+            // -- entering member details -- //
+            // insert first name
             Console.Write("First name: ");
             string fname = Console.ReadLine().ToString();
 
+            // insert last name
             Console.Write("Last name: ");
             string lname = Console.ReadLine().ToString();
             
+            // insert address
             Console.Write("Address: ");
             string addr = Console.ReadLine().ToString();
             
+            // insert phone number
             Console.Write("Phone number: ");
             string num = Console.ReadLine().ToString();
 
+            // use all user input to create a Member instance
             Member addedMember = new Member(fname, lname, addr, num);
-            bool addStatus = MemberCollection.AddMemberToArray(addedMember, members);
 
+            // add member to array
+            bool addStatus = MemberCollection.AddMemberToArray(addedMember, members); 
+
+            // if the member was successfully added to the array
+            // note that the error message is built into the AddMemberToArray() function in this case
             if (addStatus)
             {
                 Console.WriteLine();
@@ -281,14 +303,17 @@ namespace CommunityLibrary
         
         static void FindPhoneNumber()
         {
-            Console.Clear();
+            // takes member's full name as user input to print the member's phone number
+            // if there is no member whose full name matches the user input, an error is printed
 
-            Console.WriteLine("4. Find a registered member's phone number");
+            Console.Clear();
+            Console.WriteLine("4. Find a registered member's phone number"); // heading
             Console.WriteLine();
-            Console.Write("Please enter the member's full name: ");
-            
-            string userInput = Console.ReadLine();
-            MemberCollection.SearchForMemberInArray(userInput, members);
+
+
+            Console.Write("Please enter the member's full name: "); 
+            string userInput = Console.ReadLine(); // taking user input (should be the member's full name)
+            MemberCollection.SearchForMemberInArray(userInput, members); // finding member and printing corresponding phone number
 
             Console.WriteLine("Press any key to return to the staff menu.");
             Console.ReadKey();
@@ -296,10 +321,16 @@ namespace CommunityLibrary
 
         static void BorrowMovie(Member borrowingMember)
         {
-            Console.Clear();
+            // display that is shown when a member wants to borrow a movie
+            // takes the member that has logged in as input as this is the user that will be borrowing the movie
+            // performs checks including if the member already has it, if they have borrowed more than 10 movies, or if there still available copies
+            // if there are no errors, the movie will be borrowed and a confirmation message will be printed
 
-            // heading
-            Console.WriteLine("Please input the name of the movie that you would like to borrow.");
+            Console.Clear();
+            Console.WriteLine("2. Borrow a movie"); // heading
+            Console.WriteLine();
+
+            Console.WriteLine("Please input the name of the movie that you would like to borrow."); 
             string desiredMovie = Console.ReadLine();
 
             bool alreadyBorrowed = false;
@@ -317,18 +348,18 @@ namespace CommunityLibrary
                         {
                             alreadyBorrowed = true;
                             Console.WriteLine("You have already borrowed " + desiredMovie + ". You must return it before you borrow another.");
-                            errorGenerated = true;
+                            errorGenerated = true; // this prevents other error messages being printed as well
                         }
                     }
                 }
 
-                if (borrowingMember.Movies != null && borrowingMember.Movies.Length > 9 && !errorGenerated)
+                if (borrowingMember.Movies != null && borrowingMember.Movies.Length > 9 && !errorGenerated) // the logged in member has exceeded the 10 movie limit
                 {
                     Console.WriteLine("You have already borrowed the maximum of 10 movies. Please return one before borrowing more.");
-                    errorGenerated = true;
+                    errorGenerated = true; // this prevents other error messages being printed as well
                 }
                 
-                if (searchedMovie.CopiesAvailable > 0 && !alreadyBorrowed && !errorGenerated)
+                if (searchedMovie.CopiesAvailable > 0 && !alreadyBorrowed && !errorGenerated) // the member is able to borrow the movie
                 {
                     if (borrowingMember.Movies != null)
                     {
@@ -343,10 +374,10 @@ namespace CommunityLibrary
                         borrowingMember.Movies = movieList.ToArray();
                     }
 
-                    searchedMovie.CopiesAvailable -= 1;
-                    searchedMovie.BorrowHistory += 1;
+                    searchedMovie.CopiesAvailable -= 1; // updating copies available
+                    searchedMovie.BorrowHistory += 1; // updating borrow history/popularity
                     Console.WriteLine("You have successfully borrowed " + desiredMovie + ".");
-                    errorGenerated = true;
+                    errorGenerated = true; // this prevents error messages being printed
                 }
                 else if (!errorGenerated)
                 {
@@ -355,7 +386,7 @@ namespace CommunityLibrary
             }
             else
             {
-                Console.WriteLine("Sorry, there are no records of " + desiredMovie + " on our records.");
+                Console.WriteLine("Sorry, there are no records of " + desiredMovie + " on our records."); // title doesn't match a movie on record
             }
 
             Console.WriteLine("Press any key to return to the member menu.");
@@ -364,22 +395,28 @@ namespace CommunityLibrary
 
         static void ReturnMovie(Member returningMember)
         {
-            Console.Clear();
+            // display that is shown when a member wants to return a movie
+            // takes the member that has logged in as input as this is the user that will be returning the movie
+            // performs checks including if the title corresponds to a movie and if the user is able to return it or not (i.e. if they have borrowed it)
+            // if there are no errors, the movie will be borrowed and a confirmation message will be printed
 
-            // heading
+            Console.Clear();
+            Console.WriteLine("3. Return a movie"); // heading
+            Console.WriteLine();
+
             Console.WriteLine("Please input the name of the movie that you would like to return.");
             string returningMovie = Console.ReadLine();
 
-            if (MovieCollection.FindMovieInTree(returningMovie) != null)
+            if (MovieCollection.FindMovieInTree(returningMovie) != null) // if title corresponds to a movie in the BST
             {
-                Movie searchedMovie = MovieCollection.FindMovieInTree(returningMovie).data;
+                Movie searchedMovie = MovieCollection.FindMovieInTree(returningMovie).data; // finding corresponding movie
                 bool ableToReturn = false;
 
-                if (returningMember.Movies != null)
+                if (returningMember.Movies != null) 
                 {
                     for (int i = 0; i < returningMember.Movies.Length; i++)
                     {
-                        if (returningMember.Movies[i].Title == returningMovie)
+                        if (returningMember.Movies[i].Title == returningMovie) // the corresponding movie is the the member's movie array, therefore they can return it
                         {
                             ableToReturn = true;
                             var movieList = returningMember.Movies.ToList();
@@ -390,7 +427,7 @@ namespace CommunityLibrary
                     }
                 }
 
-                if (!ableToReturn)
+                if (!ableToReturn) // the user has not previously borrowed the movie
                 {
                     Console.WriteLine("Movie return unsuccessful. You are not able to return a movie that you have not borrowed.");
                 }
@@ -406,16 +443,23 @@ namespace CommunityLibrary
 
         static void ListCurrentlyBorrowedMovies(Member givenMember)
         {
-            Console.Clear();
+            // display that is shown when the member requests to see the movies they are currently borrowing
+            // takes the member that is logged in as input as we need to access this member's movie array
+            // prints the corresponding member's movie array to the screen
+            // if the movie array is empty, a message is displayed to communicate this
 
-            if(givenMember.Movies == null || givenMember.Movies.Length == 0 || givenMember.Movies[0] == null)
+            Console.Clear();
+            Console.WriteLine("4. List currently borrowed movies"); // heading
+            Console.WriteLine();
+
+            if(givenMember.Movies == null || givenMember.Movies.Length == 0 || givenMember.Movies[0] == null) // if the member is not borrowing any movies
             {
                 Console.WriteLine("You are not currently borrowing any movies.");
             }
             else
             {
                 Console.WriteLine("The movie titles that you currently are borrowing are: ");
-                for (int i = 0; i < givenMember.Movies.Length; i++)
+                for (int i = 0; i < givenMember.Movies.Length; i++) // looping through movie array to display each item
                 {
                     Console.WriteLine(givenMember.Movies[i].Title);
                 }
@@ -428,6 +472,9 @@ namespace CommunityLibrary
 
         static void DisplayMemberLogin()
         {
+            // function that is called after 'member login' is selected on main menu
+            // handles staff credentials for login attempts
+
             string username;
             string password;
 
@@ -437,19 +484,18 @@ namespace CommunityLibrary
 
             do
             {
-                if (attemptedLogin)
+                if (attemptedLogin) // if the user has already attempted (and failed) login, this message will be displayed
                 {
                     Console.WriteLine("Incorrect username or password. Insert 0 to return to the main menu or ENTER to try again.");
                     string response = Console.ReadLine();
 
                     if (response == "0")
                     {
-                        FunctionalMainMenu();
+                        FunctionalMainMenu(); // returning to the main menu if the user types '0'
                     }
                 }
 
                 Console.Clear();
-                // input username
                 Console.Write("Please enter your member username: ");
                 username = Console.ReadLine().ToString();
 
@@ -462,7 +508,7 @@ namespace CommunityLibrary
                         Console.WriteLine("You have not yet set your password. Please enter a 4-digit pin to continue.");
                         do
                         {
-                            if (attemptedPasswordSet)
+                            if (attemptedPasswordSet) // if the user has already tried to set a password but it was invalid, this message is shown
                             {
                                 Console.Clear();
                                 Console.WriteLine("This is an invalid password. Passwords must be a 4-digit pin. Please try again.");
@@ -474,13 +520,13 @@ namespace CommunityLibrary
                             validPassword = rgx.IsMatch(password);
                             attemptedPasswordSet = true;
 
-                        } while (!validPassword);
+                        } while (!validPassword); 
 
-                        members[i].Password = password; 
+                        members[i].Password = password; // assigning password to user if it is valid
                         Console.WriteLine("Password was successfully set. Press any key to continue to the member menu.");
                         Console.ReadKey();
 
-                        FunctionalMemberMenu(members[i]);
+                        FunctionalMemberMenu(members[i]); // directing them to the member menu without needing to log in again
                         break;
                     }
                 }
@@ -490,14 +536,14 @@ namespace CommunityLibrary
 
                 for (int i = 0; i < members.Length; i++)
                 {
-                    if (members[i] != null && username == members[i].Username && password == members[i].Password)
+                    if (members[i] != null && username == members[i].Username && password == members[i].Password) // checking if username and password are valid
                     {
-                        FunctionalMemberMenu(members[i]);
+                        FunctionalMemberMenu(members[i]); // display member menu 
                         break;
                     }
                     else
                     {
-                        attemptedLogin = true;
+                        attemptedLogin = true; // this means that an error will be shown on the next loop iteration
                     }
                 }
             } while (attemptedLogin); 
@@ -505,7 +551,8 @@ namespace CommunityLibrary
 
         static void DisplayMemberMenu()
         {
-            // Display member menu 
+            // displays the member menu functionality
+
             Console.WriteLine("=========== Member Menu ===========");
             Console.WriteLine("1. Display all movies");
             Console.WriteLine("2. Borrow a movie DVD");
@@ -519,13 +566,16 @@ namespace CommunityLibrary
 
         static void FunctionalMainMenu()
         {
+            // function that handles user input on the main menu
+            // different input from the user will result in the display of different menus (staff, member) or exiting
+
             bool invalid = false;
             string mainMenuSelection;
             do
             {
                 Console.Clear();
 
-                if (invalid)
+                if (invalid) // error message shown if they choose a value outside of 0-2
                 {
                     Console.WriteLine("Invalid input. Please try again.");
                     Console.WriteLine();
@@ -556,6 +606,9 @@ namespace CommunityLibrary
 
         static void FunctionalStaffMenu()
         {
+            // function that handles user input on the staff menu
+            // different input from the user will result in various staff-only functionality (add/remove movie, register new member, find member's ph number)
+
             string staffMenuSelection;
             bool invalid = false;
 
@@ -563,7 +616,7 @@ namespace CommunityLibrary
             {
                 Console.Clear();
 
-                if (invalid)
+                if (invalid) // error message shown if they choose a value outside of 0-4
                 {
                     Console.WriteLine("Invalid input. Please try again.");
                     Console.WriteLine();
@@ -603,6 +656,9 @@ namespace CommunityLibrary
 
         static void FunctionalMemberMenu(Member loggedInUser)
         {
+            // function that handles user input on the member menu
+            // different input from the user will result in various member-only functionality (display movies, borrow/return movie, show currently borrowed, show top 10)
+
             string memberMenuSelection;
             bool invalid = false;
 
@@ -610,7 +666,7 @@ namespace CommunityLibrary
             {
                 Console.Clear();
 
-                if (invalid)
+                if (invalid) // error message shown if they choose a value outside of 0-5
                 {
                     Console.WriteLine("Invalid input. Please try again.");
                     Console.WriteLine();
@@ -623,6 +679,9 @@ namespace CommunityLibrary
                 {
                     case "1": // display all movies
                         Console.Clear();
+                        Console.WriteLine("1. Display all movies"); // heading
+                        Console.WriteLine();
+
                         MovieCollection.DisplayAllMoviesInTree();
                         Console.WriteLine("Press any key to return to the member menu.");
                         Console.ReadKey();
@@ -660,12 +719,15 @@ namespace CommunityLibrary
                             movs[i] = movsWithNull[i];
                         }
 
-                        Movie[] sortedMovs = MovieCollection.SortByPopularity(movs);
+                        Movie[] sortedMovs = MovieCollection.SortByPopularity(movs); // bubble sort in decreasing order according to popularity
 
                         Console.Clear();
+                        Console.WriteLine("5. Display top 10 popular movies");
+                        Console.WriteLine();
+
                         Console.WriteLine("The top 10 most popular movies are:");
 
-                        for (int i = 0; i < 10; i++)
+                        for (int i = 0; i < 10; i++) // printing both the title and the borrow history
                         {
                             Console.WriteLine(sortedMovs[i].Title);
                             Console.WriteLine(sortedMovs[i].BorrowHistory);
@@ -772,8 +834,8 @@ namespace CommunityLibrary
 
         static void Main(string[] args)
         {
-            CreateDummyUsers();
-            CreateDummyMovies();
+            CreateDummyUsers(); // populating system with dummy users
+            CreateDummyMovies(); // populating system with dummy movies
 
             FunctionalMainMenu(); // program entry point
         }
